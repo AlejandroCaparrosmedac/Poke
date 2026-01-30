@@ -49,13 +49,20 @@
             align-items: center;
             justify-content: center;
             background-color: white;
-            border: none;
+            border: 2px solid #ddd;
             font-size: 1.2rem;
             cursor: pointer;
             z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .favorite-btn:hover {
+            border-color: #ff6b6b;
+            background-color: #fff5f5;
         }
         .favorite-btn.favorited {
             color: #ff6b6b;
+            background-color: #ffe0e0;
+            border-color: #ff6b6b;
         }
         .pokemon-card {
             position: relative;
@@ -70,6 +77,96 @@
         .badge {
             margin-right: 5px;
         }
+        .filter-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        .filter-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .search-input {
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .filter-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-select {
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            padding: 10px 12px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+        .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .btn-search {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 6px;
+            padding: 12px 30px;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        .btn-reset {
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-reset:hover {
+            background-color: #d0d0d0;
+        }
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .active-filters {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .filter-badge {
+            background-color: #667eea;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -77,6 +174,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">🎮 POKÉDEX</a>
+            <a href="https://prod.liveshare.vsengsaas.visualstudio.com/join?DDB6277C987946E84655ECAC0779A2F0D60A">juan gilipollas</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -132,6 +230,88 @@
 
     <!-- Contenido principal -->
     <div class="container py-5">
+        <!-- Sección de Búsqueda y Filtros -->
+        <div class="filter-section">
+            <h3 class="filter-title">🔍 Buscar y Filtrar</h3>
+
+            <form method="GET" action="{{ route('pokemon.index') }}" id="filterForm">
+                <!-- Búsqueda por nombre o ID -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <input type="text"
+                            class="form-control search-input"
+                            name="search"
+                            placeholder="Buscar por nombre o ID (ej: pikachu, 25)"
+                            value="{{ $activeSearch ?? '' }}"
+                            id="searchInput">
+                        <small class="text-muted d-block mt-2">Escribe el nombre o número del Pokémon</small>
+                    </div>
+                </div>
+
+                <!-- Filtros -->
+                <div class="filter-group">
+                    <!-- Filtro por Tipo -->
+                    <div>
+                        <label for="typeSelect" class="form-label fw-bold mb-2">Tipo de Pokémon</label>
+                        <select class="form-select" name="type" id="typeSelect" onchange="updateQueryParam('type', this.value)">
+                            <option value="">Todos los tipos</option>
+                            @foreach($types ?? [] as $t)
+                                <option value="{{ $t['name'] }}" @if(($activeType ?? '') === $t['name']) selected @endif>
+                                    {{ ucfirst($t['name']) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Filtro por Generación -->
+                    <div>
+                        <label for="generationSelect" class="form-label fw-bold mb-2">Generación</label>
+                        <select class="form-select" name="generation" id="generationSelect" onchange="updateQueryParam('generation', this.value)">
+                            <option value="">Todas las generaciones</option>
+                            @foreach($generations ?? [] as $gen)
+                                <option value="{{ $gen['id'] }}" @if(($activeGeneration ?? '') == $gen['id']) selected @endif>
+                                    {{ ucfirst(str_replace('-', ' ', $gen['name'])) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="filter-buttons">
+                    <button type="submit" class="btn btn-search">
+                        <i class="fas fa-search"></i> Buscar
+                    </button>
+                    <a href="{{ route('pokemon.index') }}" class="btn btn-reset">
+                        ✕ Limpiar
+                    </a>
+                </div>
+
+                <!-- Mostrar filtros activos -->
+                @if($activeSearch || $activeType || $activeGeneration)
+                    <div class="active-filters">
+                        <strong class="d-block w-100 mb-2">Filtros activos:</strong>
+                        @if($activeSearch)
+                            <span class="filter-badge">
+                                🔍 Búsqueda: {{ $activeSearch }}
+                            </span>
+                        @endif
+                        @if($activeType)
+                            <span class="filter-badge">
+                                🏷️ Tipo: {{ ucfirst($activeType) }}
+                            </span>
+                        @endif
+                        @if($activeGeneration)
+                            <span class="filter-badge">
+                                🎮 Gen: {{ $activeGeneration }}
+                            </span>
+                        @endif
+                    </div>
+                @endif
+            </form>
+        </div>
+
+        <!-- Información general -->
         <div class="row mb-4">
             <div class="col-md-8">
                 <h1 class="mb-0">📚 Pokédex</h1>
@@ -177,7 +357,7 @@
                 <ul class="pagination justify-content-center">
                     @if ($current_page > 1)
                         <li class="page-item">
-                            <a class="page-link" href="{{ route('pokemon.index', ['page' => $current_page - 1]) }}">Anterior</a>
+                            <a class="page-link" href="{{ route('pokemon.index', array_merge(['page' => $current_page - 1], request()->only(['search', 'type', 'generation']))) }}">Anterior</a>
                         </li>
                     @endif
 
@@ -190,13 +370,13 @@
 
                     @for ($i = $start_page; $i <= $end_page; $i++)
                         <li class="page-item @if($i == $current_page) active @endif">
-                            <a class="page-link" href="{{ route('pokemon.index', ['page' => $i]) }}">{{ $i }}</a>
+                            <a class="page-link" href="{{ route('pokemon.index', array_merge(['page' => $i], request()->only(['search', 'type', 'generation']))) }}">{{ $i }}</a>
                         </li>
                     @endfor
 
                     @if ($current_page < $last_page)
                         <li class="page-item">
-                            <a class="page-link" href="{{ route('pokemon.index', ['page' => $current_page + 1]) }}">Siguiente</a>
+                            <a class="page-link" href="{{ route('pokemon.index', array_merge(['page' => $current_page + 1], request()->only(['search', 'type', 'generation']))) }}">Siguiente</a>
                         </li>
                     @endif
                 </ul>
@@ -206,6 +386,26 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Función para actualizar parámetros dinámicamente
+        function updateQueryParam(paramName, paramValue) {
+            const form = document.getElementById('filterForm');
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = paramName;
+            input.value = paramValue;
+
+            // Eliminar input anterior si existe
+            const existingInput = form.querySelector(`input[name="${paramName}"]`);
+            if (existingInput) {
+                existingInput.value = paramValue;
+            } else {
+                form.appendChild(input);
+            }
+
+            form.submit();
+        }
+
+        // Favoritos
         document.querySelectorAll('.favorite-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

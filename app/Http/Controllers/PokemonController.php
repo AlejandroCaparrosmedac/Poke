@@ -16,17 +16,25 @@ class PokemonController extends Controller
     }
 
     /**
-     * Mostrar listado de Pokémon con paginación.
+     * Mostrar listado de Pokémon con paginación, búsqueda y filtros.
      */
     public function index(): View
     {
         $page = request('page', 1);
+        $search = request('search');
+        $type = request('type');
+        $generation = request('generation');
         $limit = 20;
 
-        $result = $this->pokemonService->getPokemonList($page, $limit);
+        // Obtener datos con filtros
+        $result = $this->pokemonService->filterPokemon($page, $limit, $search, $type, $generation);
 
         if (isset($result['error'])) {
-            return view('pokemon.index', ['error' => $result['error']]);
+            return view('pokemon.index', [
+                'error' => $result['error'],
+                'types' => $this->pokemonService->getTypes(),
+                'generations' => $this->pokemonService->getGenerations(),
+            ]);
         }
 
         // Obtener IDs de favoritos del usuario
@@ -39,6 +47,11 @@ class PokemonController extends Controller
             'last_page' => $result['last_page'],
             'per_page' => $result['per_page'],
             'favoriteIds' => $favoriteIds,
+            'types' => $this->pokemonService->getTypes(),
+            'generations' => $this->pokemonService->getGenerations(),
+            'activeSearch' => $search,
+            'activeType' => $type,
+            'activeGeneration' => $generation,
         ]);
     }
 
