@@ -181,7 +181,14 @@
                         </li>
                     @endif
 
-                    @for ($i = 1; $i <= $last_page && $i <= 5; $i++)
+                    @php
+                        $pages_to_show = 5;
+                        $start_page = max(1, $current_page - floor($pages_to_show / 2));
+                        $end_page = min($last_page, $start_page + $pages_to_show - 1);
+                        $start_page = max(1, $end_page - $pages_to_show + 1);
+                    @endphp
+
+                    @for ($i = $start_page; $i <= $end_page; $i++)
                         <li class="page-item @if($i == $current_page) active @endif">
                             <a class="page-link" href="{{ route('pokemon.index', ['page' => $i]) }}">{{ $i }}</a>
                         </li>
