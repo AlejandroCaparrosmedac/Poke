@@ -1,0 +1,266 @@
+/* ============================================
+   POKÉDEX - DARK MODE STYLES
+   ============================================ */
+
+:root {
+    --light-bg: #ffffff;
+    --light-bg-secondary: #f8f9fa;
+    --light-text: #212529;
+    --light-text-secondary: #6c757d;
+    --light-border: #dee2e6;
+    --light-card: #ffffff;
+
+    --dark-bg: #1a1a1a;
+    --dark-bg-secondary: #2d2d2d;
+    --dark-text: #e0e0e0;
+    --dark-text-secondary: #a0a0a0;
+    --dark-border: #404040;
+    --dark-card: #2d2d2d;
+}
+
+/* Light Mode (Default) */
+body {
+    background-color: var(--light-bg-secondary);
+    color: var(--light-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card {
+    background-color: var(--light-card);
+    color: var(--light-text);
+    border-color: var(--light-border);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: var(--dark-bg-secondary);
+    color: var(--dark-text);
+}
+
+body.dark-mode .card {
+    background-color: var(--dark-card);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .navbar {
+    background: linear-gradient(135deg, #2d2d5f 0%, #3d2d4a 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .pokemon-image {
+    background-color: #1a1a1a !important;
+}
+
+body.dark-mode .favorite-btn {
+    background-color: var(--dark-card);
+    border: 1px solid var(--dark-border);
+}
+
+body.dark-mode .alert {
+    background-color: var(--dark-card);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-control:focus {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+body.dark-mode .form-label {
+    color: var(--dark-text);
+}
+
+body.dark-mode .text-muted {
+    color: var(--dark-text-secondary) !important;
+}
+
+body.dark-mode .btn-link {
+    color: #667eea;
+}
+
+body.dark-mode .btn-link:hover {
+    color: #764ba2;
+}
+
+body.dark-mode .pagination .page-link {
+    background-color: var(--dark-card);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .pagination .page-link:hover {
+    background-color: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+body.dark-mode .pagination .page-item.active .page-link {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+body.dark-mode .pokemon-card {
+    background-color: var(--dark-card);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .pokemon-name {
+    color: var(--dark-text);
+}
+
+body.dark-mode .badge {
+    background-color: #667eea;
+}
+
+body.dark-mode .empty-state {
+    color: var(--dark-text);
+}
+
+/* Modal Styles */
+body.dark-mode .modal-content {
+    background-color: var(--dark-bg-secondary);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode .modal-header {
+    background-color: var(--dark-card);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode .modal-body {
+    background-color: var(--dark-bg-secondary);
+    color: var(--dark-text);
+}
+
+body.dark-mode .modal-footer {
+    background-color: var(--dark-card);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .modal-header .btn-close {
+    filter: invert(1);
+}
+
+body.dark-mode .modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Button Styles */
+body.dark-mode .btn-primary {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: #764ba2;
+    border-color: #764ba2;
+}
+
+body.dark-mode .btn-secondary {
+    background-color: var(--dark-card);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+body.dark-mode .btn-secondary:hover {
+    background-color: #3d3d3d;
+    border-color: #504040;
+}
+
+body.dark-mode .btn-outline-danger {
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+body.dark-mode .btn-outline-danger:hover {
+    background-color: #ff6b6b;
+    border-color: #ff6b6b;
+    color: white;
+}
+
+/* Table Styles */
+body.dark-mode .table {
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .table thead {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .table th {
+    background-color: var(--dark-card);
+    color: var(--dark-text);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .table td {
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .table tbody tr:hover {
+    background-color: #353535;
+}
+
+/* Dropdown Styles */
+body.dark-mode .dropdown-menu {
+    background-color: var(--dark-card);
+    border-color: var(--dark-border);
+}
+
+body.dark-mode .dropdown-menu .dropdown-item {
+    color: var(--dark-text);
+}
+
+body.dark-mode .dropdown-menu .dropdown-item:hover {
+    background-color: #353535;
+    color: var(--dark-text);
+}
+
+body.dark-mode .dropdown-menu .dropdown-item.active {
+    background-color: #667eea;
+    color: white;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Smooth transitions */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.navbar,
+.pokemon-card:hover,
+.btn-login:hover,
+.page-link:hover {
+    transition: none;
+}
